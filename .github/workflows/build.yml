@@ -26,8 +26,16 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+        
+      - name: Build
+        run: pnpm build
+        
+      - name: Create and upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-artifact
+          path: dist/www
+          retention-days: 1
+          overwrite: true
 
-      # TODO:
-      # - Build the application (pnpm build)
-      # - Create an artifact (archive) that contains the dist/www directoy using actions/upload-artifact@v4
-      # - In a separate job, deploy the content of that archive to GitHub Pages
+  # - In a separate job, deploy the content of that archive to GitHub Pages
