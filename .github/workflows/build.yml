@@ -4,6 +4,11 @@ name: Build and deploy
 on:
   push:
   workflow_dispatch:
+    
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -39,3 +44,18 @@ jobs:
           overwrite: true
 
   # - In a separate job, deploy the content of that archive to GitHub Pages
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - uses: actions/download-artifact@v4
+        with:
+          name: site-artifact
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
